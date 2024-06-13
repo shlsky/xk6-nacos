@@ -2,11 +2,11 @@ import nacos from "k6/x/nacos";
 import {check, sleep, group} from 'k6'
 
 var nacosClient = new nacos.NacosClient({
-    ipAddr: "nacos.test.infra.ww5sawfyut0k.bitsvc.io",
+    ipAddr: "127.0.0.1",
     port: 8848,
     username: "nacos",
     password: "nacos",
-    namespaceId: "efficiency-test",
+    namespaceId: "test",
 });
 
 export const options = {
