@@ -52,6 +52,7 @@ type NacosParams struct {
 	Port        uint64 //the nacos server port
 	Username    string //the username for nacos auth
 	Password    string //the password for nacos auth
+	Group       string //the password for nacos auth
 	NamespaceId string //the namespaceId of Nacos.When namespace is public, fill in the blank string here.
 }
 
@@ -123,13 +124,14 @@ func (mi *ModuleInstance) Exports() modules.Exports {
 	}
 }
 
-func (c *NacosClient) SelectOneHealthyInstance(svcName string) *model.Instance {
+func (c *NacosClient) SelectOneHealthyInstance(svcName string, group string) *model.Instance {
 	state := c.vu.State()
 	if state == nil {
 		common.Throw(c.vu.Runtime(), errors.New("connecting to a gRPC server in the init context is not supported"))
 	}
 	param := vo.SelectOneHealthInstanceParam{
 		ServiceName: svcName,
+		GroupName:   group,
 	}
 	res, err := c.nacos.SelectOneHealthyInstance(param)
 	if err != nil {

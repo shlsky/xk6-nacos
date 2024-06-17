@@ -59,7 +59,7 @@ func TestModuleInstance(t *testing.T) {
 			},
 			initString: codeBlock{
 				code: `var client = new nacos.NacosClient({
-					ipAddr: "127.0.0.1",
+					ipAddr: "127.0.01",
 					port: 8848,
 					username: "nacos",
 					password: "nacos",
@@ -69,7 +69,7 @@ func TestModuleInstance(t *testing.T) {
 			vuString: codeBlock{
 				code: `
 					for (var i=0;i<1000;i++){
-						var ip = client.selectOneHealthyInstance("eff-pts-agent");
+						var ip = client.selectOneHealthyInstance("1","DEFAULT");
 					}
 					
 			`,
