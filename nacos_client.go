@@ -19,8 +19,10 @@ func init() {
 	modules.Register("k6/x/nacos", New())
 }
 
+var realNacosClient = NacosClient{}
+
 func New() *NacosClient {
-	return &NacosClient{}
+	return &realNacosClient
 }
 
 type NacosParams struct {
