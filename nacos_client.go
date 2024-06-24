@@ -11,7 +11,7 @@ import (
 
 // NacosClient represents a gRPC client that can be used to make RPC requests
 type NacosClient struct {
-	nacosMap map[string]naming_client.INamingClient
+	NacosMap map[string]naming_client.INamingClient
 }
 
 func init() {
@@ -19,7 +19,9 @@ func init() {
 	modules.Register("k6/x/nacos", New())
 }
 
-var realNacosClient = NacosClient{}
+var realNacosClient = NacosClient{
+	NacosMap: make(map[string]naming_client.INamingClient),
+}
 
 func New() *NacosClient {
 	return &realNacosClient
@@ -36,10 +38,6 @@ type NacosParams struct {
 
 // NacosClient is the JS constructor for the grpc NacosClient.
 func (c *NacosClient) Init(nacosKey string, IpAddr string, Port uint64, Username string, Password string, NamespaceId string) error {
-
-	if c.nacosMap == nil {
-		c.nacosMap = make(map[string]naming_client.INamingClient)
-	}
 
 	sc := []constant.ServerConfig{
 		{
@@ -66,7 +64,7 @@ func (c *NacosClient) Init(nacosKey string, IpAddr string, Port uint64, Username
 		},
 	)
 
-	c.nacosMap[nacosKey] = nacos
+	c.NacosMap[nacosKey] = nacos
 
 	return err
 }
@@ -77,7 +75,7 @@ func (c *NacosClient) SelectOneHealthyInstance(nacosKey string, svcName string, 
 		ServiceName: svcName,
 		GroupName:   group,
 	}
-	res, err := c.nacosMap[nacosKey].SelectOneHealthyInstance(param)
+	res, err := c.NacosMap[nacosKey].SelectOneHealthyInstance(param)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +87,7 @@ func (c *NacosClient) SelectAllInstances(nacosKey string, svcName string, group 
 		ServiceName: svcName,
 		GroupName:   group,
 	}
-	res, err := c.nacosMap[nacosKey].SelectAllInstances(param)
+	res, err := c.NacosMap[nacosKey].SelectAllInstances(param)
 	if err != nil {
 		return nil, err
 	}
