@@ -1,3 +1,5 @@
 .idea/
 nacos/
 k6
+json.js
+k6_nacos.js
